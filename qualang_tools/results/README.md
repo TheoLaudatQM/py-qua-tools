@@ -6,24 +6,29 @@ The fetching tool has an API to easily fetch data from the stream processing.
 
 First the results handle needs to be initiated by specifying the QM job and the list of data to be fetched. 
 These values must correspond to results saved in the stream processing. A flag is also avalable with two options:
-- `flag="wait_for_all"` will wait until all values were processed for all named results before fetching.
-- `flag="live"` will fetch data one by one for all named results for live plotting purposes.
+- `mode="wait_for_all"` will wait until all values were processed for all named results before fetching.
+- `mode="live"` will fetch data one by one for all named results for live plotting purposes.
+
+Then the results can be fetched with the `.fetch_all()` method while the program is processing, as shown in the code snippet below.
 
 ### Usage example
-
  
 ```python
-from qualang_tools.results import result_tool
+from qualang_tools.results import fetching_tool
 
-qmm = QuantumMachinesManager()
+n_avg = 1000
+with program as prog:
+    # QUA program with n_avg averaging iterations
+
+qmm = QuantumMachinesManager(host="127.0.0.1", port="80")
 qm = qmm.open_qm(config)
-job = qm.execute(cryoscope)
+job = qm.execute(prog)
 
-my_results = result_tool(job, data_list=["I", "Q", "Ie", "Qe", "Ig", "Qg"], flag="live")
+my_results = fetching_tool(job, data_list=["I", "Q", "Ie", "Qe", "Ig", "Qg"], mode="live")
 
-fig = plt.figure(figsize=(15, 15))
+fig = plt.figure()
 
-while job.result_handles.is_processing():
+while my_results.is_processing():
     # Live plotting
     I, Q, Ie, Qe, Ig, Qg = my_results.fetch_all()
     ...
@@ -42,8 +47,7 @@ Several flags are available to customize the progress bar:
 ### Usage example
 
 ```python
-from qualang_tools.results import result_tool, progress_counter
-import time
+from qualang_tools.results import fetching_tool, progress_counter
 
 n_avg = 1000
 
@@ -52,16 +56,15 @@ with program as prog:
 
 qmm = QuantumMachinesManager()
 qm = qmm.open_qm(config)
-job = qm.execute(cryoscope)
+job = qm.execute(prog)
 
-my_results = result_tool(job, data_list=["iteration", "I", "Q", "Ie", "Qe", "Ig", "Qg"], flag="live")
+my_results = fetching_tool(job, data_list=["iteration", "I", "Q", "Ie", "Qe", "Ig", "Qg"], mode="live")
 
-fig = plt.figure(figsize=(15, 15))
+fig = plt.figure()
 
-t0 = time.time()
-while job.result_handles.is_processing():
+while my_results.is_processing():
     # Live plotting
     iteration, I, Q, Ie, Qe, Ig, Qg = my_results.fetch_all()
-    progress_counter(iteration, n_avg, start_time=t0)
+    progress_counter(iteration, n_avg, start_time=my_results.get_start_time())
     ...
 ```

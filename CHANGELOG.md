@@ -4,14 +4,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
+### Changed
+- ConfigBuilder - renamed arguments (backward compatible) in Element and MeasureElement classes.
+
+## [0.11.2] - 2022-07-25
+### Changed
+- results - Improved `is_processing()` and add `get_start_time()` to fetching_tool.
+
+## [0.11.1] - 2022-07-19
+### Fixed
+- Fixed internal package structure to support mkdocs.
+
+## [0.11.0] - 2022-07-18
+### Added
+- Calibrations - a new package with an API to perform basic single qubit calibration protocols.
+- Results.fetching_tool - Add the `.is_processing()` method.
+### Fixed
+- Loops - Fixed qua_logspace() and from_array() for logarithmic increments with integers.
+
+## [0.10.0] - 2022-07-04
 ### Fixed
 - ManualOutputControl - Fixed the `close` function
+- Waveform tools - DRAG now handles alpha=0 correctly (Was not fixed in 0.9.0)
 ### Added
 - Results - a new package with fetching tools and progress bar.
 - Plot - a new package with plotting tool for interrupting live plotting.
 - Loops - a new package with the qua_arange, qua_linspace, qua_logspace, from_array and get_equivalent_log_array tools for parametrizing QUA for_ loops.
 - Units - a new package with an API to use units (MHz, us, mV...) and functions to convert data to other units (demodulated data to volts for instance).
 - Waveform tools - Added various flattop waveforms and Blackman integral waveform
+### Changed
+- Added support for Python 3.10
+- Lower Numpy requirement to 1.17.0
 
 
 ## [0.9.0] - 2022-05-24
@@ -175,7 +198,11 @@ operation (readout pulse for instance) already defined in the configuration.
 ### Added
 - This release exposes the baking, RB and XEB functionality.
 
-[Unreleased]: https://github.com/qua-platform/py-qua-tools/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/qua-platform/py-qua-tools/compare/v0.11.2...HEAD
+[0.11.1]: https://github.com/qua-platform/py-qua-tools/compare/v0.11.1...v0.11.2
+[0.11.1]: https://github.com/qua-platform/py-qua-tools/compare/v0.11.0...v0.11.1
+[0.11.0]: https://github.com/qua-platform/py-qua-tools/compare/v0.10.0...v0.11.0
+[0.10.0]: https://github.com/qua-platform/py-qua-tools/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/qua-platform/py-qua-tools/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/qua-platform/py-qua-tools/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/qua-platform/py-qua-tools/compare/v0.7.1...v0.7.2
