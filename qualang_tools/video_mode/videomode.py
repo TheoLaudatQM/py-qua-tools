@@ -410,11 +410,29 @@ class VideoMode:
 
                         self.qm.set_io2_value(param_value)
                         self.parameter_table.table[param_name].value = param_value
-
+                elif param_name == "python":
+                    function = param_value.split("(")[0]
+                    arguments = param_value.split("(")[1][:-1].split(",")
+                    if arguments[0] != "":
+                        arguments = [float(arg) for arg in arguments]
+                    else:
+                        arguments = []
+                    try:
+                        func = getattr(self, function)
+                    except AttributeError:
+                        raise NotImplementedError(
+                            "Class `{}` does not implement `{}`".format(self.__class__.__name__, function))
+                    if len(arguments) > 0:
+                        func(*arguments)
+                    else:
+                        func()
                 else:
                     print(f"Invalid input. {param_name} is not a valid parameter name.")
 
         print("VideoMode stopped.")
+
+    def go_to(self, v):
+        self.qm.set_output_dc_offset_by_element("filter_cavity_2", "single", v)
 
     def execute(self, prog: Optional[Program] = None, *execute_args) -> QmJob:
         """Start the video mode.
